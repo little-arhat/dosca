@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
+try:
+    from __builtin__ import reduce
+except ImportError:
+    from functools import reduce
+
 class ParseError(ValueError):
     pass
-
-
-def parse_file(filename):
-    with open(filename) as fileobj:
-        return parse(fileobj)
 
 
 def parse(fileobj):
@@ -22,7 +22,7 @@ def parse(fileobj):
             if diff < 0:
                 msg = 'Too high depth for subsection, missed previous'
                 raise ParseError(msg)
-            for _ in xrange(diff):
+            for _ in range(diff):
                 section_stack.pop()
 
             reduce(dict.__getitem__, section_stack, res)[section_name] = {}
@@ -33,14 +33,14 @@ def parse(fileobj):
             (key, value) = parse_assignment(line)
             reduce(dict.__getitem__, section_stack, res)[key] = value
         else:
-            raise ParseError('Unrecognized line: `{}`'.format(line))
+            raise ParseError('Unrecognized line: `{0}`'.format(line))
     return res
 
 
 def parse_section(line):
     depth = line.count('[')
     if depth != line.count(']'):
-        msg = 'Unbalanced brackets in section definition: `{}`'.format(line)
+        msg = 'Unbalanced brackets in section definition: `{0}`'.format(line)
         raise ParseError(msg)
     section_name = line.strip('[]')
     return (depth, section_name.strip())
@@ -54,7 +54,7 @@ def parse_assignment(line):
 def parse_value(raw_value):
     value = raw_value.strip()
     if value.startswith('[') and value.endswith(']'):
-        return map(parse_value, value[1:-1].split(','))
+        return [parse_value(v) for v in value[1:-1].split(',')]
     elif value.startswith('"') and value.endswith('"'):
         return value[1:-1]
     elif value.startswith("'") and value.endswith("'"):

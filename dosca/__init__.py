@@ -2,10 +2,10 @@
 
 from __future__ import absolute_import
 
-from .dosca import parse, parse_file, ParseError
+from .dosca import parse, ParseError
 
 
-__all__ = ('parse', 'parse_file', 'ParseError')
+__all__ = ('parse', 'ParseError')
 
 
 __version__ = '0.0.1'

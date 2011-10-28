@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import unittest
-import StringIO
 
 import dosca
 
@@ -58,7 +57,7 @@ some garbage
 
 class DoscaSuite(unittest.TestCase):
     def test_simple_types(self):
-        source = StringIO.StringIO(SIMPLE_TYPES)
+        source = SIMPLE_TYPES.split('\n')
         result = {
             'kwd1': 'and',
             'kwd2': [1, 2, 4],
@@ -71,7 +70,7 @@ class DoscaSuite(unittest.TestCase):
         self.assertEqual(dosca.parse(source), result)
 
     def test_sections(self):
-        source = StringIO.StringIO(SECTIONS)
+        source = SECTIONS.split('\n')
         result = {
             'kwd1': 'value1',
             'section1': {
@@ -93,7 +92,7 @@ class DoscaSuite(unittest.TestCase):
         self.assertEqual(dosca.parse(source), result)
 
     def test_comments_and_spaces(self):
-        source = StringIO.StringIO(COMMENTS)
+        source = COMMENTS.split('\n')
         result = {
             'kwd1': 'value1',
             'section': {
@@ -104,7 +103,7 @@ class DoscaSuite(unittest.TestCase):
         self.assertEqual(dosca.parse(source), result)
 
     def test_bad(self):
-        bad_sources = map(StringIO.StringIO, [BAD1, BAD2, BAD3])
+        bad_sources = map(lambda s: s.split('\n'), [BAD1, BAD2, BAD3])
         for bad_source in bad_sources:
             self.assertRaises(dosca.ParseError,
                               dosca.parse,
