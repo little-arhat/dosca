@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
 
-__all__ = ('parse', 'parse_file', 'ParseError')
-
-
 class ParseError(ValueError):
     pass
 
