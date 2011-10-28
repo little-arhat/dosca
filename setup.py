@@ -12,7 +12,7 @@ setup(
     name='dosca',
     version=dosca.__version__,
     description='''Dumb Simple Config File Parser.''',
-    long_description=open('README.html').read(),
+    long_description=open('README.rst').read(),
     author='Roma Sokolov',
     author_email='sokolov.r.v@gmail.com',
     url='https://github.com/little-arhat/dosca',
