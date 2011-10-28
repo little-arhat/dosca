@@ -29,7 +29,7 @@ Install
 
 ~/yourvirtualenv/python setup.py install
 
-Cheesshop package coming soon.
+pip install dosca
 
 License
 -------
