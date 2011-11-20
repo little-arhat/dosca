@@ -11,7 +11,7 @@ import dosca
 setup(
     name='dosca',
     version=dosca.__version__,
-    description='''Dumb Simple Config File Parser.''',
+    description='''Damn Simple Config File Parser.''',
     long_description=open('README.rst').read(),
     author='Roma Sokolov',
     author_email='sokolov.r.v@gmail.com',
