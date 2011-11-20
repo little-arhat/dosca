@@ -9,7 +9,12 @@ class ParseError(ValueError):
     pass
 
 
-def parse(fileobj):
+def parse_file(filename, custom_parsers=None):
+    with open(filename) as fileobj:
+        return parse(fileobj, custom_parsers=custom_parsers)
+
+
+def parse(fileobj, custom_parsers=None):
     section_stack = []
     res = {}
     for line in fileobj:
@@ -30,7 +35,7 @@ def parse(fileobj):
         elif line.startswith('#'):
             pass
         elif '=' in line:
-            (key, value) = parse_assignment(line)
+            (key, value) = parse_assignment(line, custom_parsers=custom_parsers)
             reduce(dict.__getitem__, section_stack, res)[key] = value
         else:
             raise ParseError('Unrecognized line: `{0}`'.format(line))
@@ -46,12 +51,13 @@ def parse_section(line):
     return (depth, section_name.strip())
 
 
-def parse_assignment(line):
+def parse_assignment(line, custom_parsers=None):
     (raw_key, raw_value) = line.split('=', 1)
-    return (raw_key.strip(), parse_value(raw_value))
+    return (raw_key.strip(), parse_value(raw_value,
+                                         custom_parsers=custom_parsers))
 
 # maybe use shlex?
-def parse_value(raw_value):
+def parse_value(raw_value, custom_parsers=None):
     value = raw_value.strip()
     if value.startswith('[') and value.endswith(']'):
         return [parse_value(v) for v in value[1:-1].split(',')]
@@ -67,5 +73,9 @@ def parse_value(raw_value):
         return False
     elif not value:
         return None
+    elif custom_parsers:
+        for (predicate, converter) in custom_parsers:
+            if predicate(value):
+                return converter(value)
     else:
         return value

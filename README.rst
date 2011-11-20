@@ -11,6 +11,7 @@ Features
 
 - Knows str, int, list, boolean and None types
 - Supports sections and subsections
+- Supports custom converters
 - Easy to use -- one function!
 
 API
@@ -32,6 +33,9 @@ Q2: Does it support interpolation or some complex types?
 
 A2: No, it's not. When I say 'simple', I mean really simple. Dosca only support basic things, essential for parsing config files.
 If you want advanced features, use `ConfigObj <http://www.voidspace.org.uk/python/configobj.html>`_ or `ConfigParser <http://docs.python.org/library/configparser.html>`_. Or xml and dtd?
+
+Q3: How to use this library?
+A3: Just pass string to dosca.parse or see test_dosca.py for details.
 
 Install
 -------

@@ -55,6 +55,13 @@ kwd1 = value1
 some garbage
 '''
 
+CUSTOM_PARSERS = '''
+kwd1 = yes
+kwd2 = no
+kwd3 = on
+kwd4 = off
+'''
+
 class DoscaSuite(unittest.TestCase):
     def test_simple_types(self):
         source = SIMPLE_TYPES.split('\n')
@@ -108,6 +115,23 @@ class DoscaSuite(unittest.TestCase):
             self.assertRaises(dosca.ParseError,
                               dosca.parse,
                               bad_source)
+
+    def test_custom_parsers(self):
+        source = StringIO.StringIO(CUSTOM_PARSERS)
+        result = {
+            'kwd1': True,
+            'kwd2': False,
+            'kwd3': True,
+            'kwd4': False
+        }
+        custom_parsers = [
+            (lambda x: x.lower() == 'yes', lambda _: True),
+            (lambda x: x.lower() == 'on', lambda _: True),
+            (lambda x: x.lower() == 'no' or x.lower() == 'off',
+             lambda _: False)
+        ]
+        self.assertEqual(dosca.parse(source, custom_parsers=custom_parsers),
+                         result)
 
 
 if __name__ == '__main__':
