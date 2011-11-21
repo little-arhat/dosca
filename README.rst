@@ -25,7 +25,7 @@ FAQ
 Q1: Does 'dosca' have validation capabilities?
 
 A1: No, it's not. If you want validate your config, use library designed for this task.
-`Contract <https://github.com/barbuza/contract>`_, `Procrustes <https://github.com/Deepwalker/procrustes>`_ or, perhaps, Damn Simple Validation Library?
+`Contract <https://github.com/barbuza/contract>`_, `Procrustes <https://github.com/Deepwalker/procrustes>`_ or, perhaps, `Damn Simple Validation Library <https://github.com/little-arhat/kuvalda>`_?
 
 
 
