@@ -2,12 +2,12 @@
 
 from __future__ import absolute_import
 
-from .dosca import parse, ParseError
+from .dosca import parse, parse_fille, ParseError
 
 
-__all__ = ('parse', 'ParseError')
+__all__ = ('parse', 'parse_file', 'ParseError')
 
 
-__version__ = '0.0.2'
+__version__ = '0.0.3'
 __author__ = 'Roma Sokolov'
 __license__ = 'MIT'

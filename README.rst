@@ -17,7 +17,9 @@ Features
 API
 ---
 
-``parse`` function takes any iterable (file object, for example), which produces strings and returns filled ``dict`` or raises ``ParseError``
+``parse`` function takes any iterable (fileobj, for example), which produces strings and returns filled ``dict`` or raises ``ParseError``.
+
+``parse_file`` helper function takes path to file, opens it and passes fileobj to ``parse`` functino.
 
 FAQ
 ---
