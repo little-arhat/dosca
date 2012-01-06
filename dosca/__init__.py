@@ -2,7 +2,7 @@
 
 from __future__ import absolute_import
 
-from .dosca import parse, parse_fille, ParseError
+from .dosca import parse, parse_file, ParseError
 
 
 __all__ = ('parse', 'parse_file', 'ParseError')
