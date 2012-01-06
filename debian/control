@@ -1,0 +1,13 @@
+Source: dosca
+Section: Development
+Priority: optional
+Maintainer: Roma Sokolov
+Uploaders: Roma Sokolov <sokolov.r.v@gmail.com>
+Build-Depends: debhelper (>= 7), cdbs, python-support
+Standards-Version: 3.8.4
+
+Package: dosca
+Architecture: any
+Section: admin
+Depends: python-minimal
+Description: Dumb Simple Config File Parser
