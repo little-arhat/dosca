@@ -13,7 +13,7 @@ setup(
     version=dosca.__version__,
     description='''Damn Simple Config File Parser.''',
     long_description=open('README.rst').read(),
-    author='Roma Sokolov',
+    author=dosca.__author__,
     author_email='sokolov.r.v@gmail.com',
     url='https://github.com/little-arhat/dosca',
     packages=[
