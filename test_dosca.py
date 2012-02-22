@@ -14,6 +14,7 @@ kwd4 = 'completely different'
 kwd5 = 42
 kwd6 = true
 kwd7 =
+kwd8 = []
 '''
 
 SECTIONS = '''
@@ -73,7 +74,8 @@ class DoscaSuite(unittest.TestCase):
             'kwd4': 'completely different',
             'kwd5': 42,
             'kwd6': True,
-            'kwd7': None
+            'kwd7': None,
+            'kwd8': []
             }
         self.assertEqual(dosca.parse(source), result)
 

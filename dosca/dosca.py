@@ -60,7 +60,11 @@ def parse_assignment(line, custom_parsers=None):
 def parse_value(raw_value, custom_parsers=None):
     value = raw_value.strip()
     if value.startswith('[') and value.endswith(']'):
-        return [parse_value(v) for v in value[1:-1].split(',')]
+        content = value[1:-1]
+        if content:
+            return [parse_value(v) for v in content.split(',')]
+        else:
+            return []
     elif value.startswith('"') and value.endswith('"'):
         return value[1:-1]
     elif value.startswith("'") and value.endswith("'"):
