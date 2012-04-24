@@ -32,7 +32,7 @@ def parse(fileobj, custom_parsers=None):
 
             reduce(dict.__getitem__, section_stack, res)[section_name] = {}
             section_stack.append(section_name)
-        elif line.startswith('#'):
+        elif line.startswith('#') or line.startswith(';'):
             pass
         elif '=' in line:
             (key, value) = parse_assignment(line, custom_parsers=custom_parsers)
