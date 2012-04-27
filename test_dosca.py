@@ -62,6 +62,7 @@ kwd1 = yes
 kwd2 = no
 kwd3 = on
 kwd4 = off
+kwd5 = simplestring
 '''
 
 class DoscaSuite(unittest.TestCase):
@@ -125,7 +126,8 @@ class DoscaSuite(unittest.TestCase):
             'kwd1': True,
             'kwd2': False,
             'kwd3': True,
-            'kwd4': False
+            'kwd4': False,
+            'kwd5': 'simplestring'
         }
         custom_parsers = [
             (lambda x: x.lower() == 'yes', lambda _: True),

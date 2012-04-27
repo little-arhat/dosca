@@ -81,5 +81,6 @@ def parse_value(raw_value, custom_parsers=None):
         for (predicate, converter) in custom_parsers:
             if predicate(value):
                 return converter(value)
+        return value
     else:
         return value
