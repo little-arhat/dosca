@@ -8,6 +8,6 @@ from .dosca import parse, parse_file, ParseError
 __all__ = ('parse', 'parse_file', 'ParseError')
 
 
-__version__ = '1.2.1'
+__version__ = '1.2.5'
 __author__ = 'Roma Sokolov'
 __license__ = 'MIT'
