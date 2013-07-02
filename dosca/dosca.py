@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import shlex
+
 try:
     from __builtin__ import reduce
 except ImportError:
@@ -61,8 +63,9 @@ def parse_value(raw_value, custom_parsers=None):
     value = raw_value.strip()
     if value.startswith('[') and value.endswith(']'):
         content = value[1:-1]
+        content = [v[:-1] if v.endswith(',') else v for v in shlex.split(content)]
         if content:
-            return [parse_value(v) for v in content.split(',')]
+            return [parse_value(v) for v in content]
         else:
             return []
     elif value.startswith('"') and value.endswith('"'):
