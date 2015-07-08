@@ -66,6 +66,15 @@ kwd4 = off
 kwd5 = simplestring
 '''
 
+ARRAY_KEYS = '''
+kwd[] = 1
+kwd[] = 2
+kwd[] = 3
+[section]
+k[] = 1
+k[] = 2
+'''
+
 class DoscaSuite(unittest.TestCase):
     def test_simple_types(self):
         source = SIMPLE_TYPES.split('\n')
@@ -140,6 +149,36 @@ class DoscaSuite(unittest.TestCase):
         self.assertEqual(dosca.parse(source, custom_parsers=custom_parsers),
                          result)
 
+    def test_array_keys(self):
+        source = ARRAY_KEYS.split('\n')
+        result = {
+            'kwd[]': [1,2,3],
+            'section': {
+                'k[]': [1, 2]
+            }
+        }
+        self.assertEqual(dosca.parse(source,
+                                     key_hooks=[dosca.ext.PHP_ARRAYS]),
+                         result)
+
+    def test_extensions(self):
+        source = StringIO.StringIO(CUSTOM_PARSERS)
+        result = {
+            'kwd1': True,
+            'kwd2': False,
+            'kwd3': True,
+            'kwd4': False,
+            'kwd5': 'simplestring'
+        }
+        parse = dosca.ext.make_parse(dosca.ext.YES_NO_BOOL,
+                                     dosca.ext.ON_OFF_BOOL)
+        self.assertEqual(dict(parse(source)), result)
+
+    def test_save(self):
+        source = filter(None, SECTIONS.split('\n'))
+        parsed = dosca.parse(source)
+        saved = list(dosca.save(parsed))
+        self.assertEqual(saved, source)
 
 if __name__ == '__main__':
     unittest.main()

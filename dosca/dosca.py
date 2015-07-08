@@ -12,43 +12,16 @@ except ImportError:
 class ParseError(ValueError):
     pass
 
-def dump_section(fileobj, name, params, indent=None, level=1):
-    fileobj.write(format_section_line(name, level=level))
-    for (k, v) in params.iteritems():
-        if type(v) == collections.OrderedDict:
-            dump_section(fileobj, k, v, indent=indent, level=level+1)
-        elif type(v) == list:
-            for x in v:
-                fileobj.write(format_value_line(k, x, indent=indent))
-        else:
-            fileobj.write(format_value_line(k, v, indent=indent))
+def default_key_hook(section, key, value):
+    section[key] = value
+    return True
 
-def save_file(res, filename, indent=None):
-    with open(filename, 'w') as fileobj:
-        return save(res, fileobj, indent=indent)
-
-def save(res, fileobj, indent=None):
-    for (k, v) in res.iteritems():
-        if type(v) == collections.OrderedDict:
-            dump_section(fileobj, k, v, indent=indent)
-        else:
-            fileobj.write(format_value_line(k ,v, indent=indent))
-
-        fileobj.write("\n")
-
-def format_section_line(name, level=1):
-    return "{0}{1}{2}\n".format("[" * level, name, "]" * level)
-
-def format_value_line(key, value, indent=None):
-    return "{0}{1} = {2}\n".format(indent if indent is not None else "",
-                                   key,
-                                   value if value is not None else "")
-
-def parse_file(filename, custom_parsers=None):
+def parse_file(filename, custom_parsers=None, key_hooks=[]):
     with open(filename) as fileobj:
-        return parse(fileobj, custom_parsers=custom_parsers)
+        return parse(fileobj, custom_parsers=custom_parsers,
+                     key_hooks=key_hooks)
 
-def parse(fileobj, custom_parsers=None):
+def parse(fileobj, custom_parsers=None, key_hooks=[]):
     section_stack = []
     res = OrderedDict()
     for line in fileobj:
@@ -63,20 +36,16 @@ def parse(fileobj, custom_parsers=None):
                 raise ParseError(msg)
             for _ in range(diff):
                 section_stack.pop()
-
             reduce(dict.__getitem__, section_stack, res)[section_name] = OrderedDict()
             section_stack.append(section_name)
         elif line.startswith('#') or line.startswith(';'):
             pass
         elif '=' in line:
             (key, value) = parse_assignment(line, custom_parsers=custom_parsers)
-            if key.endswith('[]'):
-                try:
-                    reduce(dict.__getitem__, section_stack, res)[key].append(value)
-                except KeyError, e:
-                     reduce(dict.__getitem__, section_stack, res)[key] = [value]
-            else:
-                reduce(dict.__getitem__, section_stack, res)[key] = value
+            section = reduce(dict.__getitem__, section_stack, res)
+            for hook in (key_hooks + [default_key_hook]):
+                if hook(section, key, value) is not None:
+                    break
         else:
             raise ParseError('Unrecognized line: `{0}`'.format(line))
     return res
@@ -125,3 +94,33 @@ def parse_value(raw_value, custom_parsers=None):
         return value
     else:
         return value
+
+# TODO: provide custom_formatters and key_hooks
+def dump_section(params, indent=None, level=1):
+    for (k, v) in params.iteritems():
+        if isinstance(v, dict):
+            yield format_section_line(k, level=level)
+            for line in dump_section(v, indent=indent, level=level+1):
+                yield line
+        elif isinstance(v, list) and k.endswith('[]'):
+            for x in v:
+                yield format_value_line(k, x, indent=indent)
+        else:
+            yield format_value_line(k, v, indent=indent)
+
+def save_file(res, filename, indent=None):
+    with open(filename, 'w') as fileobj:
+        fileobj.writelines(save(res, indent=indent))
+
+# yield from ...
+def save(res, indent=None):
+    for line in dump_section(res, indent=None):
+        yield line
+
+def format_section_line(name, level=1):
+    return "{0}{1}{2}".format("[" * level, name, "]" * level)
+
+def format_value_line(key, value, indent=None):
+    return "{0}{1} = {2}".format(indent if indent is not None else "",
+                                 key,
+                                 value if value is not None else "")
