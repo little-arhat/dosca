@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import os
 import StringIO
 import unittest
 
@@ -18,8 +19,7 @@ kwd8 = []
 kwd9 = ['123,45', '67,8']
 '''
 
-SECTIONS = '''
-kwd1 = value1
+SECTIONS = '''kwd1 = value1
 [section1]
 kwd2 = value2
 [section2]
@@ -177,8 +177,14 @@ class DoscaSuite(unittest.TestCase):
     def test_save(self):
         source = filter(None, SECTIONS.split('\n'))
         parsed = dosca.parse(source)
-        saved = list(dosca.save(parsed))
-        self.assertEqual(saved, source)
+        sink = StringIO.StringIO()
+
+        dosca.save(parsed, sink)
+
+        sink.seek(0)
+        saved = sink.read()
+        self.assertEqual(SECTIONS, saved)
+
 
 if __name__ == '__main__':
     unittest.main()

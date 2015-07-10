@@ -110,17 +110,20 @@ def dump_section(params, indent=None, level=1):
 
 def save_file(res, filename, indent=None):
     with open(filename, 'w') as fileobj:
-        fileobj.writelines(save(res, indent=indent))
+        save(res, fileobj, indent)
+
+def save(res, fileobj, indent=None):
+    fileobj.writelines(dump(res, indent))
 
 # yield from ...
-def save(res, indent=None):
+def dump(res, indent=None):
     for line in dump_section(res, indent=None):
         yield line
 
 def format_section_line(name, level=1):
-    return "{0}{1}{2}".format("[" * level, name, "]" * level)
+    return "{0}{1}{2}\n".format("[" * level, name, "]" * level)
 
 def format_value_line(key, value, indent=None):
-    return "{0}{1} = {2}".format(indent if indent is not None else "",
+    return "{0}{1} = {2}\n".format(indent if indent is not None else "",
                                  key,
                                  value if value is not None else "")
