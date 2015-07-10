@@ -110,10 +110,13 @@ def dump_section(params, indent=None, level=1):
 
 def save_file(res, filename, indent=None):
     with open(filename, 'w') as fileobj:
-        fileobj.writelines(save(res, indent=indent))
+        save(res, fileobj, indent)
+
+def save(res, fileobj, indent=None):
+    fileobj.writelines(dump(res, indent))
 
 # yield from ...
-def save(res, indent=None):
+def dump(res, indent=None):
     for line in dump_section(res, indent=None):
         yield line
 

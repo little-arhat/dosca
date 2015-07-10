@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import os
-import tempfile
 import StringIO
 import unittest
 
@@ -178,13 +177,14 @@ class DoscaSuite(unittest.TestCase):
     def test_save(self):
         source = filter(None, SECTIONS.split('\n'))
         parsed = dosca.parse(source)
+        sink = StringIO.StringIO()
 
-        f = tempfile.NamedTemporaryFile(delete=False)
-        dosca.save_file(parsed, f.name)
+        dosca.save(parsed, sink)
 
-        saved = f.read()
-        os.unlink(f.name)
+        sink.seek(0)
+        saved = sink.read()
         self.assertEqual(SECTIONS, saved)
+
 
 if __name__ == '__main__':
     unittest.main()
