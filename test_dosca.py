@@ -2,7 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import os
-import StringIO
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
 import unittest
 
 import dosca
@@ -132,7 +135,7 @@ class DoscaSuite(unittest.TestCase):
                               bad_source)
 
     def test_custom_parsers(self):
-        source = StringIO.StringIO(CUSTOM_PARSERS)
+        source = StringIO(CUSTOM_PARSERS)
         result = {
             'kwd1': True,
             'kwd2': False,
@@ -162,7 +165,7 @@ class DoscaSuite(unittest.TestCase):
                          result)
 
     def test_extensions(self):
-        source = StringIO.StringIO(CUSTOM_PARSERS)
+        source = StringIO(CUSTOM_PARSERS)
         result = {
             'kwd1': True,
             'kwd2': False,
@@ -177,7 +180,7 @@ class DoscaSuite(unittest.TestCase):
     def test_save(self):
         source = filter(None, SECTIONS.split('\n'))
         parsed = dosca.parse(source)
-        sink = StringIO.StringIO()
+        sink = StringIO()
 
         dosca.save(parsed, sink)
 

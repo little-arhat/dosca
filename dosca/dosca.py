@@ -9,6 +9,12 @@ try:
 except ImportError:
     from functools import reduce
 
+def iteritems(d, **kw):
+    try:
+        return d.iteritems(**kw)
+    except AttributeError:
+        return d.items(**kw)
+
 class ParseError(ValueError):
     pass
 
@@ -97,7 +103,7 @@ def parse_value(raw_value, custom_parsers=None):
 
 # TODO: provide custom_formatters and key_hooks
 def dump_section(params, indent=None, level=1):
-    for (k, v) in params.iteritems():
+    for (k, v) in iteritems(params):
         if isinstance(v, dict):
             yield format_section_line(k, level=level)
             for line in dump_section(v, indent=indent, level=level+1):
