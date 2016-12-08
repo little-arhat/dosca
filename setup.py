@@ -9,27 +9,23 @@ except ImportError:
 import dosca
 
 setup(
-    name='dosca',
+    name="dosca",
     version=dosca.__version__,
-    description='''Damn Simple Config File Parser.''',
-    long_description=open('README.rst').read(),
+    description="""Damn Simple Config File Parser.""",
+    long_description=open("README.rst").read(),
     author=dosca.__author__,
-    author_email='sokolov.r.v@gmail.com',
-    url='https://github.com/little-arhat/dosca',
+    author_email="sokolov.r.v@gmail.com",
+    url="https://github.com/little-arhat/dosca",
     packages=[
-        'dosca'
+        "dosca"
     ],
-    license='MIT',
-    classifiers=(
-        'Development Status :: 3 - Alpha',
-        'Intended Audience :: Developers',
-        'Natural Language :: English',
-        'License :: OSI Approved :: MIT License',
-        'Programming Language :: Python',
-        'Programming Language :: Python :: 2.6',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3.0',
-        'Programming Language :: Python :: 3.1',
-        'Programming Language :: Python :: 3.2'
-    ),
+    license="MIT",
+    classifiers=[
+        "Natural Language :: English",
+        "License :: OSI Approved :: MIT License",
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 2.6",
+        "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3",
+    ]
 )
