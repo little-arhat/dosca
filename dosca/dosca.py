@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import shlex
 import collections
 from collections import OrderedDict
 
@@ -71,16 +70,11 @@ def parse_assignment(line, custom_parsers=None):
     return (raw_key.strip(), parse_value(raw_value,
                                          custom_parsers=custom_parsers))
 
-# maybe use shlex?
 def parse_value(raw_value, custom_parsers=None):
     value = raw_value.strip()
     if value.startswith('[') and value.endswith(']'):
-        content = value[1:-1]
-        content = [v[:-1] if v.endswith(',') else v for v in shlex.split(content)]
-        if content:
-            return [parse_value(v) for v in content]
-        else:
-            return []
+        content = comma_split(value[1:-1])
+        return [parse_value(v) for v in content]
     elif value.startswith('"') and value.endswith('"'):
         return value[1:-1]
     elif value.startswith("'") and value.endswith("'"):
@@ -133,3 +127,23 @@ def format_value_line(key, value, indent=None):
     return "{0}{1} = {2}\n".format(indent if indent is not None else "",
                                  key,
                                  value if value is not None else "")
+
+def comma_split(s):
+    start_pos = 0
+    in_string = False
+    for (i, c) in enumerate(s):
+        if (c == ' ') and not in_string:
+            start_pos +=1
+        elif c == "'" or c == '"':
+            if in_string:
+                yield s[start_pos:i+1]
+                start_pos = i + 1
+            else:
+                start_pos = i
+            in_string = not in_string
+        elif c == ',' and not in_string:
+            if start_pos != i:
+                yield s[start_pos:i]
+            start_pos = i + 1
+    if start_pos != len(s):
+        yield s[start_pos:]

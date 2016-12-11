@@ -19,7 +19,7 @@ kwd5 = 42
 kwd6 = true
 kwd7 =
 kwd8 = []
-kwd9 = ['123,45', '67,8']
+kwd9 = ['123,45', '67,8','68']
 '''
 
 SECTIONS = '''kwd1 = value1
@@ -90,7 +90,7 @@ class DoscaSuite(unittest.TestCase):
             'kwd6': True,
             'kwd7': None,
             'kwd8': [],
-            'kwd9': ['123,45', '67,8']
+            'kwd9': ['123,45', '67,8', '68']
             }
         self.assertEqual(dosca.parse(source), result)
 
